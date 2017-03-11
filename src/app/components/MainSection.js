@@ -21,9 +21,6 @@ const TODO_FILTERS = {
 };
 
 class MainSection extends Component {
-  // constructor(props, context) {
-  //   super(props, context);
-  // }
 
   renderToggleAll(completedCount) {
     const { todos, dispatch } = this.props;
