@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import classnames from 'classnames';
 import TodoTextInput from './TodoTextInput';
 import { connect } from 'react-redux';
@@ -11,33 +11,21 @@ class TodoItem extends Component {
     this.state = {
       editing: false
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleDoubleClick = this.handleDoubleClick.bind(this);
-    this.handleSave = this.handleSave.bind(this);
-  }
-
-  handleChange() {
-    this.props.dispatch(completeTodo(this.props.todo.id));
-  }
-
-  handleClick() {
-    this.props.dispatch(deleteTodo(this.props.todo.id));
-  }
-
-  handleDoubleClick() {
-    this.setState({editing: true});
-  }
-
-  handleSave(text) {
-    if (text.length > 0) {
-      this.props.dispatch(editTodo(this.props.todo.id, text));
-    }
-    this.setState({editing: false});
   }
 
   render() {
-    const {todo} = this.props;
+    const { todo, dispatch } = this.props;
+
+    const handleChange = () => dispatch(completeTodo(todo.id));
+    const handleDelete = () => dispatch(deleteTodo(todo.id));
+    const handleEdit = () => this.setState({ editing: true });
+
+    const handleSave = text => {
+      if (text.length > 0) {
+        dispatch(editTodo(this.props.todo.id, text));
+      }
+      this.setState({ editing: false });
+    };
 
     let element;
     if (this.state.editing) {
@@ -45,8 +33,8 @@ class TodoItem extends Component {
         <TodoTextInput
           text={todo.text}
           editing={this.state.editing}
-          onSave={this.handleSave}
-          />
+          onSave={handleSave}
+        />
       );
     } else {
       element = (
@@ -55,17 +43,17 @@ class TodoItem extends Component {
             className="toggle"
             type="checkbox"
             checked={todo.completed}
-            onChange={this.handleChange}
-            />
+            onChange={handleChange}
+          />
           <label
-            onDoubleClick={this.handleDoubleClick}
-            >
+            onDoubleClick={handleEdit}
+          >
             {todo.text}
           </label>
           <button
             className="destroy"
-            onClick={this.handleClick}
-            />
+            onClick={handleDelete}
+          />
         </div>
       );
     }
@@ -76,7 +64,7 @@ class TodoItem extends Component {
           completed: todo.completed,
           editing: this.state.editing
         })}
-        >
+      >
         {element}
       </li>
     );
@@ -86,15 +74,7 @@ class TodoItem extends Component {
 TodoItem.propTypes = {
   todo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
-  // editTodo: PropTypes.func.isRequired,
-  // deleteTodo: PropTypes.func.isRequired,
-  // completeTodo: PropTypes.func.isRequired
 };
-
-// function mapStateToProps(state) {
-//   return {
-//   };
-// }
 
 function mapDispatchToProps(dispatch) {
   return {
@@ -103,6 +83,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-  // mapStateToProps,
   mapDispatchToProps
 )(TodoItem);

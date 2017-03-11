@@ -1,13 +1,13 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import TodoItem from './TodoItem';
 import Footer from './Footer';
 
 import {
-  SHOW_ALL, 
-  SHOW_COMPLETED, 
-  SHOW_ACTIVE, 
+  SHOW_ALL,
+  SHOW_COMPLETED,
+  SHOW_ACTIVE,
 } from '../store/visibilityFilter/constants';
 
 import {
@@ -21,60 +21,38 @@ const TODO_FILTERS = {
 };
 
 class MainSection extends Component {
-  constructor(props, context) {
-    super(props, context);
-    // this.state = {filter: SHOW_ALL};
-    // this.handleClearCompleted = this.handleClearCompleted.bind(this);
-    // this.handleShow = this.handleShow.bind(this);
-    // this.handleCompleteAll = this.handleCompleteAll.bind(this);
-  }
-
-  // handleClearCompleted() {
-  //   this.props.actions.clearCompleted();
-  // }
-
-  handleCompleteAll() {
-   console.log('PROPS>>>>>>>>>>>>>', this.props);
-   this.props.dispatch(completeAll());
-  }
-
-  // handleShow(filter) {
-  //   this.setState({filter});
+  // constructor(props, context) {
+  //   super(props, context);
   // }
 
   renderToggleAll(completedCount) {
-    const {todos} = this.props;
+    const { todos, dispatch } = this.props;
+    const handleCompleteAll = () => dispatch(completeAll());
+
     if (todos.length > 0) {
       return (
         <input
           className="toggle-all"
           type="checkbox"
           checked={completedCount === todos.length}
-          onChange={this.handleCompleteAll}
-          />
+          onChange={handleCompleteAll}
+        />
       );
     }
   }
 
-  renderFooter(completedCount) {
-    const {todos, filter} = this.props;
-    const activeCount = todos.length - completedCount;
+  renderFooter() {
+    const { todos } = this.props;
 
     if (todos.length) {
       return (
-        <Footer
-          completedCount={completedCount}
-          activeCount={activeCount}
-          filter={filter}
-          onClearCompleted={this.handleClearCompleted}
-          onShow={this.handleShow}
-          />
+        <Footer/>
       );
     }
   }
 
   render() {
-    const {todos, filter} = this.props;
+    const { todos, filter } = this.props;
 
     const filteredTodos = todos.filter(TODO_FILTERS[filter]);
     const completedCount = todos.reduce((count, todo) =>
@@ -90,10 +68,10 @@ class MainSection extends Component {
             <TodoItem
               key={todo.id}
               todo={todo}
-              />
+            />
           )}
         </ul>
-        {this.renderFooter(completedCount)}
+        {this.renderFooter()}
       </section>
     );
   }

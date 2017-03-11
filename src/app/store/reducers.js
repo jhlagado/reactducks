@@ -5,9 +5,12 @@ import visibilityFilterReducer from './visibilityFilter/reducers';
 import modalReducer from './Modal/reducers';
 import authReducer from './auth/reducers';
 
-export default combineReducers({
+const reducers = combineReducers({
   auth: authReducer,
   todos: todos,
   visibilityFilter: visibilityFilterReducer,
   modals: modalReducer,
 });
+
+export default reducers;
+

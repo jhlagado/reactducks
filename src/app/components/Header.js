@@ -4,26 +4,26 @@ import { connect } from 'react-redux';
 import { addTodo } from '../store/Todo/actions';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.handleSave = this.handleSave.bind(this);
-  }
-
-  handleSave(text) {
-    if (text.length !== 0) {
-      this.props.dispatch(addTodo(text));
-    }
-  }
+  // constructor(props) {
+  //   super(props);
+  // }
 
   render() {
-    return (
+    const { dispatch } = this.props;
+    const handleSave = text => {
+      if (text.length !== 0) {
+        dispatch(addTodo(text));
+      }
+    };
+
+    return ( 
       <header className="header">
         <h1>todos</h1>
         <TodoTextInput
           newTodo
-          onSave={this.handleSave}
+          onSave={handleSave}
           placeholder="What needs to be done?"
-          />
+        />
       </header>
     );
   }

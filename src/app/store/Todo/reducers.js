@@ -5,7 +5,7 @@ import {
   COMPLETE_TODO,
   COMPLETE_ALL,
   CLEAR_COMPLETED,
-} from './actions';
+} from './constants';
 
 const todos = (state = [], action) => {
   switch (action.type) {

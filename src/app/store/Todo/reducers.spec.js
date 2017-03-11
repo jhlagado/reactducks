@@ -1,5 +1,11 @@
 import todos from './reducers';
-import { completeTodo, addTodo, clearCompleted, deleteTodo, editTodo } from './actions';
+import { 
+  completeTodo, 
+  addTodo, 
+  clearCompleted, 
+  deleteTodo, 
+  editTodo 
+} from './actions';
 
 describe('todos reducer', () => {
 

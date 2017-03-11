@@ -19,6 +19,7 @@ const FILTER_TITLES = {
 };
 
 class Footer extends Component {
+
   renderTodoCount() {
     const { activeCount } = this.props;
     const itemWord = activeCount === 1 ? 'item' : 'items';
@@ -88,7 +89,7 @@ Footer.propTypes = {
 function mapStateToProps(state) {
   const todos = state.todos;
   const completedCount = todos.reduce((count, todo) => todo.completed ? count + 1 : count, 0);
-  const activeCount = todos.length - this.completedCount;
+  const activeCount = todos.length - completedCount;
 
   return {
     filter: state.visibilityFilter,

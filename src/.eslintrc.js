@@ -28,5 +28,7 @@ module.exports = {
     'space-before-blocks': 0,
     'space-before-function-paren': 0,
     'no-useless-constructor': 0,
+    'arrow-parens': 0,
+    'react/jsx-closing-bracket-location': 0,
   }
 }
