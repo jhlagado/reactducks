@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import classnames from 'classnames';
 import {
@@ -18,10 +18,9 @@ const FILTER_TITLES = {
   [SHOW_COMPLETED]: 'Completed'
 };
 
-class Footer extends Component {
+export class Footer extends Component {
 
-  renderTodoCount() {
-    const { activeCount } = this.props;
+  renderTodoCount(activeCount) {
     const itemWord = activeCount === 1 ? 'item' : 'items';
 
     return (
@@ -40,22 +39,22 @@ class Footer extends Component {
       <a
         className={classnames({ selected: filter === selectedFilter })}
         style={{ cursor: 'pointer' }}
-        onClick={handleSetFilter} 
-        >
+        onClick={handleSetFilter}
+      >
         {title}
       </a>
     );
   }
 
-  renderClearButton() {
-    const { completedCount, dispatch } = this.props;
+  renderClearButton(completedCount) {
+    const { dispatch } = this.props;
     const handleClearCompleted = () => dispatch(clearCompleted());
     if (completedCount > 0) {
       return (
         <button
           className="clear-completed"
           onClick={handleClearCompleted}
-          >
+        >
           Clear completed
         </button>
       );
@@ -63,9 +62,13 @@ class Footer extends Component {
   }
 
   render() {
+    const { todos } = this.props;
+    const completedCount = todos.reduce((count, todo) => todo.completed ? count + 1 : count, 0);
+    const activeCount = todos.length - completedCount;
+
     return (
       <footer className="footer">
-        {this.renderTodoCount()}
+        {this.renderTodoCount(activeCount)}
         <ul className="filters">
           {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(filter =>
             <li key={filter}>
@@ -73,28 +76,25 @@ class Footer extends Component {
             </li>
           )}
         </ul>
-        {this.renderClearButton()}
+        {this.renderClearButton(completedCount)}
       </footer>
     );
   }
 }
 
 Footer.propTypes = {
+  todos: PropTypes.array.isRequired,
   filter: PropTypes.string.isRequired,
-  completedCount: PropTypes.number.isRequired,
-  activeCount: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
   const todos = state.todos;
-  const completedCount = todos.reduce((count, todo) => todo.completed ? count + 1 : count, 0);
-  const activeCount = todos.length - completedCount;
+  const filter = state.visibilityFilter;
 
   return {
-    filter: state.visibilityFilter,
-    completedCount,
-    activeCount
+    todos,
+    filter,
   };
 }
 

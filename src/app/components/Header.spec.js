@@ -1,11 +1,11 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Header from './Header';
+import { Header } from './Header';
 import TodoTextInput from './TodoTextInput';
 
 function setup() {
   const props = {
-    addTodo: jasmine.createSpy()
+    dispatch: a => a,
   };
 
   const renderer = TestUtils.createRenderer();
@@ -37,13 +37,5 @@ describe('components', () => {
       expect(input.props.placeholder).toBe('What needs to be done?');
     });
 
-    it('should call addTodo if length of text is greater than 0', () => {
-      const {output, props} = setup();
-      const input = output.props.children[1];
-      input.props.onSave('');
-      expect(props.addTodo.calls.count()).toBe(0);
-      input.props.onSave('Use Redux');
-      expect(props.addTodo.calls.count()).toBe(1);
-    });
   });
 });

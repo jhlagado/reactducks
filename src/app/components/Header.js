@@ -3,10 +3,7 @@ import TodoTextInput from './TodoTextInput';
 import { connect } from 'react-redux';
 import { addTodo } from '../store/Todo/actions';
 
-class Header extends Component {
-  // constructor(props) {
-  //   super(props);
-  // }
+export class Header extends Component {
 
   render() {
     const { dispatch } = this.props;

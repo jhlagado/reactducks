@@ -30,5 +30,6 @@ module.exports = {
     'no-useless-constructor': 0,
     'arrow-parens': 0,
     'react/jsx-closing-bracket-location': 0,
+    'react/jsx-space-before-closing': 0,
   }
 }

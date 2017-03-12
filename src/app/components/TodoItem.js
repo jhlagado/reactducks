@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { completeTodo, deleteTodo, editTodo } from '../store/Todo/actions';
 
-class TodoItem extends Component {
+export class TodoItem extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {

@@ -72,7 +72,7 @@ describe('todos reducer', () => {
 
   it('should handle EDIT_TODO', () => {
 
-    const action1 = editTodo('FRED', 0);
+    const action1 = editTodo(0, 'FRED');
     const state1 = [item1, item2, item3];
     const state2 = todos(state1, action1);
 

@@ -1,19 +1,17 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import Footer from './Footer';
-import {SHOW_ALL, SHOW_ACTIVE} from '../constants/TodoFilters';
+import { Footer } from './Footer';
+import { SHOW_ALL } from '../store/visibilityFilter/constants';
 
 function setup(propOverrides) {
   const props = Object.assign({
-    completedCount: 0,
-    activeCount: 0,
+    todos: [],
     filter: SHOW_ALL,
-    onClearCompleted: jasmine.createSpy(),
-    onShow: jasmine.createSpy()
+    dispatch: a => a,
   }, propOverrides);
 
   const renderer = TestUtils.createRenderer();
-  renderer.render(<Footer {...props}/>);
+  renderer.render(<Footer {...props} />);
   const output = renderer.getRenderOutput();
 
   return {
@@ -35,19 +33,23 @@ function getTextContent(elem) {
 describe('components', () => {
   describe('Footer', () => {
     it('should render container', () => {
-      const {output} = setup();
+      const { output } = setup();
       expect(output.type).toBe('footer');
       expect(output.props.className).toBe('footer');
     });
 
     it('should display active count when 0', () => {
-      const {output} = setup({activeCount: 0});
+      const { output } = setup({ todos: [] });
       const [count] = output.props.children;
       expect(getTextContent(count)).toBe('No items left');
     });
 
     it('should display active count when above 0', () => {
-      const {output} = setup({activeCount: 1});
+      const { output } = setup({
+        todos: [
+          { id: 1 }
+        ]
+      });
       const [count] = output.props.children;
       expect(getTextContent(count)).toBe('1 item left');
     });
@@ -70,32 +72,24 @@ describe('components', () => {
       });
     });
 
-    it('should call onShow when a filter is clicked', () => {
-      const {output, props} = setup();
-      const [, filters] = output.props.children;
-      const filterLink = filters.props.children[1].props.children;
-      filterLink.props.onClick({});
-      expect(props.onShow).toHaveBeenCalledWith(SHOW_ACTIVE);
-    });
-
     it('shouldnt show clear button when no completed todos', () => {
-      const {output} = setup({completedCount: 0});
+      const {output} = setup({
+        todos: []
+      });
       const [, , clear] = output.props.children;
       expect(clear).toBe(undefined);
     });
 
     it('should render clear button when completed todos', () => {
-      const {output} = setup({completedCount: 1});
+      const {output} = setup({
+        todos: [
+          { id: 1, completed: true }
+        ]
+      });
       const [, , clear] = output.props.children;
       expect(clear.type).toBe('button');
       expect(clear.props.children).toBe('Clear completed');
     });
 
-    it('should call onClearCompleted on clear button click', () => {
-      const {output, props} = setup({completedCount: 1});
-      const [, , clear] = output.props.children;
-      clear.props.onClick({});
-      expect(props.onClearCompleted).toHaveBeenCalled();
-    });
   });
 });

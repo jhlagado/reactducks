@@ -20,7 +20,7 @@ const TODO_FILTERS = {
   [SHOW_COMPLETED]: todo => todo.completed
 };
 
-class MainSection extends Component {
+export class MainSection extends Component {
 
   renderToggleAll(completedCount) {
     const { todos, dispatch } = this.props;

@@ -1,9 +1,9 @@
 import React from 'react';
 import TestUtils from 'react-addons-test-utils';
-import MainSection from './MainSection';
+import { MainSection } from './MainSection';
 import TodoItem from './TodoItem';
 import Footer from './Footer';
-import {SHOW_ALL, SHOW_COMPLETED} from '../constants/TodoFilters';
+import {SHOW_ALL, SHOW_COMPLETED} from '../store/visibilityFilter/constants';
 
 function setup(propOverrides) {
   const props = Object.assign({
@@ -18,13 +18,9 @@ function setup(propOverrides) {
         id: 1
       }
     ],
-    actions: {
-      editTodo: jasmine.createSpy(),
-      deleteTodo: jasmine.createSpy(),
-      completeTodo: jasmine.createSpy(),
-      completeAll: jasmine.createSpy(),
-      clearCompleted: jasmine.createSpy()
-    }
+    filter: SHOW_ALL,
+    dispatch: jasmine.createSpy(),
+
   }, propOverrides);
 
   const renderer = TestUtils.createRenderer();
@@ -40,6 +36,7 @@ function setup(propOverrides) {
 
 describe('components', () => {
   describe('MainSection', () => {
+
     it('should render container', () => {
       const {output} = setup();
       expect(output.type).toBe('section');
@@ -73,7 +70,7 @@ describe('components', () => {
         const {output, props} = setup();
         const [toggle] = output.props.children;
         toggle.props.onChange({});
-        expect(props.actions.completeAll).toHaveBeenCalled();
+        expect(props.dispatch).toHaveBeenCalled();
       });
     });
 
@@ -82,26 +79,8 @@ describe('components', () => {
         const {output} = setup();
         const [, , footer] = output.props.children;
         expect(footer.type).toBe(Footer);
-        expect(footer.props.completedCount).toBe(1);
-        expect(footer.props.activeCount).toBe(1);
-        expect(footer.props.filter).toBe(SHOW_ALL);
       });
 
-      it('onShow should set the filter', () => {
-        const {output, renderer} = setup();
-        const [, , footer] = output.props.children;
-        footer.props.onShow(SHOW_COMPLETED);
-        const updated = renderer.getRenderOutput();
-        const [, , updatedFooter] = updated.props.children;
-        expect(updatedFooter.props.filter).toBe(SHOW_COMPLETED);
-      });
-
-      it('onClearCompleted should call clearCompleted', () => {
-        const {output, props} = setup();
-        const [, , footer] = output.props.children;
-        footer.props.onClearCompleted();
-        expect(props.actions.clearCompleted).toHaveBeenCalled();
-      });
     });
 
     describe('todo list', () => {
@@ -114,16 +93,6 @@ describe('components', () => {
           expect(item.type).toBe(TodoItem);
           expect(item.props.todo).toBe(props.todos[i]);
         });
-      });
-
-      it('should filter items', () => {
-        const {output, renderer, props} = setup();
-        const [, , footer] = output.props.children;
-        footer.props.onShow(SHOW_COMPLETED);
-        const updated = renderer.getRenderOutput();
-        const [, updatedList] = updated.props.children;
-        expect(updatedList.props.children.length).toBe(1);
-        expect(updatedList.props.children[0].props.todo).toBe(props.todos[1]);
       });
     });
   });
